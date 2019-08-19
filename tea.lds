@@ -15,6 +15,27 @@ SECTIONS
 		*(.isr_handle);
 	}
 
+	. = ALIGN(8);
+	.initcall0 : {
+		_initcall0_start = ADDR(.initcall0);
+                KEEP(*(.initcall0*));
+		_initcall0_end = .;
+        }
+
+	. = ALIGN(8);
+	.initcall1 : {
+		_initcall1_start = ADDR(.initcall1);
+                KEEP(*(.initcall1*));
+		_initcall1_end = .;
+        }
+
+	. = ALIGN(8);
+	.initcall2 : {
+		_initcall2_start = ADDR(.initcall2);
+                KEEP(*(.initcall2*));
+		_initcall2_end = .;
+        }
+
 	. = ALIGN(4);
 	.data : { *(.data*); }
 	.bss : { *(.bss*) }

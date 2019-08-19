@@ -11,6 +11,8 @@
 #define __aligned(x)		__attribute__((aligned(x)))
 #define __packed	__attribute__((packed))
 #define	__unused	__attribute__((unused))
+#define __weak		__attribute__((weak))
+#define __used		__attribute__((__used__))
 
 #ifndef ASSEMBLER
 

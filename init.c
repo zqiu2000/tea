@@ -8,6 +8,7 @@
 #include <tea.h>
 #include <mtrr.h>
 #include <idt.h>
+#include <mod_init.h>
 
 static int tea_config_init(void)
 {
@@ -38,12 +39,13 @@ static int arch_init(void)
 void c_entry(void)
 {
 	printf("c entry !!\n");
-
 	/* Init BSS? */
 
 	load_ucode();
 
 	setup_mtrr();
+
+	earlycall_init();
 
 	arch_early_init();
 
@@ -52,6 +54,10 @@ void c_entry(void)
 	tea_config_init();
 
 	arch_init();
+
+	modulecall_init();
+
+	devcall_init();
 
 	printf("will test fault!\n");
 

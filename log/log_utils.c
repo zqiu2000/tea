@@ -11,6 +11,7 @@
 #include <string.h>
 #include <memlog.h>
 #include <div64.h>
+#include <uart.h>
 
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
 #define F_LONG	(1)
@@ -38,7 +39,7 @@ static void buffer_saver(char byte, void *data)
 
 static void log_distributer(char byte, void *data)
 {
-	outb(byte, 0x3f8);
+	uart_tx(byte);
 	memlog_write(byte);
 }
 
