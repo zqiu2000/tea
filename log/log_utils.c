@@ -132,6 +132,15 @@ static int parse_print_args(const char *fmt, va_list args, void *data)
 			count += parse_number(va, 10, width, parm);
 			break;
 
+		case 'u':
+			if (flag & F_LONG)
+				va = va_arg(args, uint64_t);
+			else
+				va = va_arg(args, unsigned int);
+
+			count += parse_number(va, 10, width, parm);
+			break;
+
 		case 'x':
 			if (flag & F_LONG)
 				va = va_arg(args, uint64_t);
