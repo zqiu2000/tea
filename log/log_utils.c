@@ -5,6 +5,7 @@
  * 	Qiu Zanxiong <zqiu2000@126.com>
  */
 
+#include <tea.h>
 #include <stdarg.h>
 #include <types.h>
 #include <raw_io.h>
@@ -12,6 +13,7 @@
 #include <memlog.h>
 #include <div64.h>
 #include <uart.h>
+#include <tsc.h>
 
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
 #define F_LONG	(1)
@@ -218,6 +220,27 @@ int sprintf(char *buf, const char *fmt, ...)
 	va_end(args);
 
 	return i;
+}
+
+#define REDUCE_TIMESTAMP_COST
+void print_prefix_flavor(void)
+{
+	if (tea_cfg.log_timestamp) {
+		uint64_t ts = rdtsc();
+#ifdef REDUCE_TIMESTAMP_COST
+		printf("[%lu ns]", ticks_2_ns(ts));
+#else
+		uint32_t sec, ms;
+		uint32_t tsc_freq = get_tsc_khz();
+
+		if (tsc_freq) {
+			ms = do_div(ts, tsc_freq * 1000);
+			sec = ts;
+			ms = lldiv((uint64_t)ms * 1000, tsc_freq);
+			printf("[%u.%06u]", sec, ms);
+		}
+#endif
+	}
 }
 
 void printf(const char *fmt, ...)

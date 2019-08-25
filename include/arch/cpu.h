@@ -167,6 +167,6 @@ static inline void cpuid(uint32_t leaf,
 	asm_cpuid(eax, ebx, ecx, edx);
 }
 
-#endif /* ASSEMBLER */
+#endif /* !ASSEMBLER */
 
 #endif

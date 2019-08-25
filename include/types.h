@@ -14,6 +14,11 @@
 #define __weak		__attribute__((weak))
 #define __used		__attribute__((__used__))
 
+#define min(x, y)	((x) < (y)) ? (x) : (y)
+
+#define max(x, y)	((x) < (y)) ? (y) : (x)
+
+
 #ifndef ASSEMBLER
 
 /* Define standard data types.  These definitions allow software components

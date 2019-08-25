@@ -31,15 +31,24 @@ INCLUDES = -I./include/ -I./include/libs/ -I./include/interrupt/ -I./include/arc
 
 ASM_SRC += arch/head.S
 ASM_SRC += interrupt/isr.S
+
 C_SRC += init.c
 C_SRC += mod_init.c
+C_SRC += config.c
+
+C_SRC += arch/lapic.c
+C_SRC += arch/tsc.c
+C_SRC += arch/mtrr.c
+
 C_SRC += libs/memory.c
 C_SRC += libs/string.c
-C_SRC += log/log_utils.c
-C_SRC += interrupt/idt.c
-C_SRC += log/memlog.c
-C_SRC += arch/mtrr.c
 C_SRC += libs/div64.c
+
+C_SRC += log/log_utils.c
+C_SRC += log/memlog.c
+
+C_SRC += interrupt/idt.c
+
 C_SRC += driver/uart/uart.c
 
 C_OBJS = $(patsubst %.c, $(BUILD_HW_DIR)/%.o, $(C_SRC))

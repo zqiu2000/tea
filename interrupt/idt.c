@@ -138,14 +138,14 @@ int irq_handler(struct irq_regs *reg)
 
 void dump_regs(struct irq_regs *reg)
 {
-	printf("EIP: %04x:[<%08x>] EFLAGS: %08x\n",
+	pr_info("EIP: %04x:[<%08x>] EFLAGS: %08x\n",
 			(u16)reg->xcs, reg->eip, reg->eflags);
 
-	printf("EAX: %08x EBX: %08x ECX: %08x EDX: %08x\n",
+	pr_info("EAX: %08x EBX: %08x ECX: %08x EDX: %08x\n",
 			reg->eax, reg->ebx, reg->ecx, reg->edx);
-	printf("ESI: %08x EDI: %08x EBP: %08x ESP: %08x\n",
+	pr_info("ESI: %08x EDI: %08x EBP: %08x ESP: %08x\n",
 			reg->esi, reg->edi, reg->ebp, reg->esp);
-	printf(" DS: %04x ES: %04x FS: %04x GS: %04x SS: %04x\n",
+	pr_info("DS: %04x ES: %04x FS: %04x GS: %04x SS: %04x\n",
 			(u16)reg->xds, (u16)reg->xes, (u16)reg->xfs,
 			(u16)reg->xgs, (u16)reg->xss);
 }
@@ -174,7 +174,7 @@ void isr_handler(struct irq_regs *reg)
 	case 18:
 	case 19:
 	case 20:
-		printf("CPU Exception: %s\n", exceptions[reg->vector]);
+		pr_info("CPU Exception: %s\n", exceptions[reg->vector]);
 		dump_regs(reg);
 		break;
 	case 21:
@@ -188,7 +188,7 @@ void isr_handler(struct irq_regs *reg)
 	case 29:
 	case 30:
 	case 31:
-		printf("CPU Exception: Reserved fault %d\n", reg->vector);
+		pr_info("CPU Exception: Reserved fault %d\n", reg->vector);
 		dump_regs(reg);
 		break;
 	default:

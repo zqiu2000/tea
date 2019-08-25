@@ -9,11 +9,8 @@
 #include <mtrr.h>
 #include <idt.h>
 #include <mod_init.h>
-
-static int tea_config_init(void)
-{
-	return 0;
-}
+#include <lapic.h>
+#include <tsc.h>
 
 static int load_ucode(void)
 {
@@ -28,6 +25,11 @@ static int arch_early_init(void)
 	idt_init();
 	/* Enable Cache? */
 	/* Enable paging? */
+
+	tsc_init();
+
+	early_apic_init();
+
 	return 0;
 }
 
@@ -38,12 +40,14 @@ static int arch_init(void)
 
 void c_entry(void)
 {
-	printf("c entry !!\n");
+	pr_info("c entry !!\n");
 	/* Init BSS? */
 
 	load_ucode();
 
 	setup_mtrr();
+
+	tea_config_init();
 
 	earlycall_init();
 
@@ -51,19 +55,21 @@ void c_entry(void)
 
 	local_irq_enable();
 
-	tea_config_init();
-
 	arch_init();
 
 	modulecall_init();
 
 	devcall_init();
 
-	printf("will test fault!\n");
+	pr_info("will send ipi\n");
+
+	apic_send_ipi(0, 100);
+
+	pr_info("will test fault!\n");
 
 	asm volatile("int $3");
 
-	printf("will halt\n");
+	pr_info("will halt\n");
 
 	panic("die loop @ %p \n", c_entry);
 	asm volatile("hlt");
