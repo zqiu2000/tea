@@ -11,7 +11,7 @@
 .section .isr_handle, "ax"
 	.code32
 .macro declare_isr num
-	.align(8)
+	.align(16)
 	.globl isr_\num
 	isr_\num:
 .if (\num==8 || \num==10 || \num==11 || \num==12 || \num==13 || \num==14 || \num==17)

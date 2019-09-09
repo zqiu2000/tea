@@ -138,8 +138,8 @@ int irq_handler(struct irq_regs *reg)
 
 void dump_regs(struct irq_regs *reg)
 {
-	pr_info("EIP: %04x:[<%08x>] EFLAGS: %08x\n",
-			(u16)reg->xcs, reg->eip, reg->eflags);
+	pr_info("EIP: %04x:[<%08x>] EFLAGS: %08x ERRNO: %08x\n",
+			(u16)reg->xcs, reg->eip, reg->eflags, reg->errno);
 
 	pr_info("EAX: %08x EBX: %08x ECX: %08x EDX: %08x\n",
 			reg->eax, reg->ebx, reg->ecx, reg->edx);
@@ -176,6 +176,7 @@ void isr_handler(struct irq_regs *reg)
 	case 20:
 		pr_info("CPU Exception: %s\n", exceptions[reg->vector]);
 		dump_regs(reg);
+		panic("Fixme if exception could be recovered!\n");
 		break;
 	case 21:
 	case 22:
@@ -190,9 +191,11 @@ void isr_handler(struct irq_regs *reg)
 	case 31:
 		pr_info("CPU Exception: Reserved fault %d\n", reg->vector);
 		dump_regs(reg);
+		panic("Unknown exception!\n");
 		break;
 	default:
 		pr_debug("%d handler\n", reg->vector);
+		dump_regs(reg);
 		irq_handler(reg);
 		break;
 	}
