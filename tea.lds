@@ -48,7 +48,7 @@ SECTIONS
 	. = ALIGN(4096);
 	. = 0xa000;
 	mem_log = .;
-	. += 0x1000;
+	. += 0x2000;
 	mem_log_end = .;
 	/DISCARD/ : {
 		*(.comment)
