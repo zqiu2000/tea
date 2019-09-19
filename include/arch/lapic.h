@@ -1,3 +1,10 @@
+/*
+ * $Tea$
+ * SPDX-License-Identifier: BSD-3-Clause
+ * Author:
+ * 	Qiu Zanxiong <zqiu2000@126.com>
+ */
+
 #ifndef _LAPIC_H_
 #define _LAPIC_H_
 
@@ -75,4 +82,5 @@ int apic_send_ipi(uint32_t cpuid, uint32_t vector);
 
 int apic_send_self(uint32_t vector);
 
+void apic_eoi(void);
 #endif

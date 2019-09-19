@@ -8,6 +8,8 @@
 #include <idt.h>
 #include <tea.h>
 #include <spinlock.h>
+#include <lapic.h>
+#include <vectors.h>
 
 struct idt_entry idt_table[256];
 struct idt_ptr idt_p;
@@ -16,7 +18,7 @@ struct irq_action {
 	void *data;
 	spinlock_t lock;
 	char *name;
-} irq_actions[256 - 32];
+} irq_actions[256 - START_VECTOR];
 
 static const char *exceptions[] = {
 	"Devide Error",
@@ -61,8 +63,8 @@ void idt_init(void)
 		idt_table[(irq)].flags = (0x8E) | 0x60;
 		isr_entry += isr_entry_size;
 
-		if (irq >= 0x20)
-			spinlock_init(&irq_actions[irq - 0x20].lock);
+		if (irq >= START_VECTOR)
+			spinlock_init(&irq_actions[irq - START_VECTOR].lock);
 	}
 
 	idt_p.limit = 8 * 256 - 1;
@@ -73,7 +75,7 @@ void idt_init(void)
 
 int register_irq(uint32_t irq, irq_call_t irq_call, void *data, char *name)
 {
-	uint32_t vector = irq + 0x20;
+	uint32_t vector = irq + START_VECTOR;
 	unsigned long flags;
 
 	if (vector > 255) {
@@ -98,7 +100,7 @@ int register_irq(uint32_t irq, irq_call_t irq_call, void *data, char *name)
 
 int free_irq(uint32_t irq)
 {
-	uint32_t vector = irq + 0x20;
+	uint32_t vector = irq + START_VECTOR;
 	unsigned long flags;
 
 	if (vector > 255) {
@@ -123,16 +125,24 @@ int free_irq(uint32_t irq)
 
 int irq_handler(struct irq_regs *reg)
 {
-	uint32_t hw_irq = reg->vector - 0x20;
+	uint32_t hw_irq = reg->vector - START_VECTOR;
 
-	if (hw_irq > (255 - 32))
+	if (hw_irq > (255 - START_VECTOR))
 		panic("Irq %d overflow\n", hw_irq);
 
-	if (irq_actions[hw_irq].irq_call)
-		return irq_actions[hw_irq].irq_call(reg, irq_actions[hw_irq].data);
+	if (irq_actions[hw_irq].irq_call) {
+		int ret;
+
+		ret = irq_actions[hw_irq].irq_call(reg, irq_actions[hw_irq].data);
+
+		apic_eoi();
+
+		return ret;
+	}
 
 	pr_info("Irq %d unhandled!\n", hw_irq);
 
+	apic_eoi();
 	return -1;
 }
 

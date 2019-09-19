@@ -1,3 +1,10 @@
+/*
+ * $Tea$
+ * SPDX-License-Identifier: BSD-3-Clause
+ * Author:
+ * 	Qiu Zanxiong <zqiu2000@126.com>
+ */
+
 #include <tea.h>
 #include <lapic.h>
 #include <msr.h>
@@ -9,6 +16,7 @@ struct apic_ops {
 	void (*apic_enable)(void);
 	int (*apic_send_ipi)(uint32_t cpuid, uint32_t vector);
 	int (*apic_sned_self)(uint32_t vector);
+	void (*apic_eoi)(void);
 };
 
 static struct apic_ops lapic_ops;
@@ -115,6 +123,11 @@ static int x2apic_send_self(uint32_t vector)
 	return 0;
 }
 
+static void x2apic_eoi(void)
+{
+	wrmsr(MSR_IA32_EXT_APIC_EOI, 0);
+}
+
 void early_apic_init(void)
 {
 	if (x2apic_valid()) {
@@ -123,6 +136,7 @@ void early_apic_init(void)
 		lapic_ops.apic_enable = x2apic_enable;
 		lapic_ops.apic_send_ipi = x2apic_send_ipi;
 		lapic_ops.apic_sned_self = x2apic_send_self;
+		lapic_ops.apic_eoi = x2apic_eoi;
 	} else {
 		pr_info("xapic!\n");
 		lapic_ops.apic_init = lapic_init;
@@ -142,4 +156,9 @@ int apic_send_ipi(uint32_t cpuid, uint32_t vector)
 int apic_send_self(uint32_t vector)
 {
 	return lapic_ops.apic_sned_self(vector);
+}
+
+void apic_eoi(void)
+{
+	lapic_ops.apic_eoi();
 }

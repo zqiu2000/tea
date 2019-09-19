@@ -65,11 +65,9 @@ void c_entry(void)
 
 	apic_send_ipi(0, 100);
 
-	pr_info("will test fault!\n");
+	pr_info("Call apps\n");
 
-	asm volatile("int $3");
-
-	pr_info("will halt\n");
+	timer_demo();
 
 	panic("die loop @ %p \n", c_entry);
 	asm volatile("hlt");

@@ -7,7 +7,7 @@
 
 #include <tea.h>
 #include <raw_io.h>
-#include <uart.h>
+#include <uart/uart.h>
 #include <mod_init.h>
 
 /*TODO add uart init functions*/

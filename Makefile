@@ -27,7 +27,12 @@ ASFLAGS_KVM = $(ASFLAGS) -DKVM
 
 LD_FLAGS = -nostdlib -T$(LDS)
 
-INCLUDES = -I./include/ -I./include/libs/ -I./include/interrupt/ -I./include/arch/ -I./include/log/ -I./include/driver/uart
+INCLUDES = -I./include/ \
+	-I./include/libs/ \
+	-I./include/interrupt/ \
+	-I./include/arch/ \
+	-I./include/log/ \
+	-I./include/driver/
 
 ASM_SRC += arch/head.S
 ASM_SRC += interrupt/isr.S
@@ -50,6 +55,9 @@ C_SRC += log/memlog.c
 C_SRC += interrupt/idt.c
 
 C_SRC += driver/uart/uart.c
+C_SRC += driver/time/timer.c
+
+C_SRC += apps/demo.c
 
 C_OBJS = $(patsubst %.c, $(BUILD_HW_DIR)/%.o, $(C_SRC))
 ASM_OBJS = $(patsubst %.S, $(BUILD_HW_DIR)/%.o, $(ASM_SRC))

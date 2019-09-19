@@ -12,7 +12,7 @@
 #include <string.h>
 #include <memlog.h>
 #include <div64.h>
-#include <uart.h>
+#include <uart/uart.h>
 #include <tsc.h>
 
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
