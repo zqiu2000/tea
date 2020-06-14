@@ -11,14 +11,14 @@ BUILD_KVM_DIR = $(BUILD_DIR)/kvm
 TARGET = $(BUILD_HW_DIR)/$(BIN)
 TARGET_KVM = $(BUILD_KVM_DIR)/$(KVM_BIN)
 
-all: $(TARGET).bin $(TARGET_KVM).bin
+LDS = tea.lds
+
+all: $(LDS) $(TARGET).bin $(TARGET_KVM).bin
 
 CC = gcc
 LD = ld
 OBJCOPY = objcopy
 NM = nm
-
-LDS = tea.lds
 
 CFLAGS = -O2 -nostdlib -fno-builtin -Wall -MMD -m32
 ASFLAGS = -nostdlib -Wall -MMD -m32 -DASSEMBLER
@@ -65,6 +65,11 @@ ASM_OBJS = $(patsubst %.S, $(BUILD_HW_DIR)/%.o, $(ASM_SRC))
 KVM_C_OBJS = $(patsubst %.c, $(BUILD_KVM_DIR)/%.o, $(C_SRC))
 KVM_ASM_OBJS = $(patsubst %.S, $(BUILD_KVM_DIR)/%.o, $(ASM_SRC))
 
+$(LDS): $(LDS).in
+	@echo "Generating linker script"
+	cp $< $(LDS).S
+	$(Q) $(CC) -C $(ASFLAGS) $(INCLUDES) -P -E $(LDS).S -o $@
+
 $(TARGET).bin: $(TARGET).elf
 	$(Q) $(OBJCOPY) -O binary $^ $@
 	$(Q) $(NM) -a $< > $(TARGET).map
@@ -107,4 +112,4 @@ $(BUILD_KVM_DIR)/%.o: %.S
 
 .PHONY: clean
 clean:
-	-rm -rf $(B)
+	-rm -rf $(B) $(LDS) $(LDS).S *.d

@@ -8,6 +8,8 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+#ifndef ASSEMBLER
+
 typedef struct _tea_cfg {
 	int log_timestamp;
 } tea_cfg_t;
@@ -15,5 +17,15 @@ typedef struct _tea_cfg {
 extern tea_cfg_t tea_cfg;
 
 int tea_config_init(void);
+
+#endif
+
+/* Memory layout */
+#define TEA_STACK_SIZE			(0x1000)
+#define TEA_ENTRY_ADDR			(0x1000)
+#define MEM_LOG_ADDR			(0xA000)
+#define MEM_LOG_SIZE			(0x2000)
+#define SHARE_MEM_ADDR			(MEM_LOG_ADDR+MEM_LOG_SIZE)
+#define SHARE_MEM_SIZE			(0x1000)
 
 #endif
