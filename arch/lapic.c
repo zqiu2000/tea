@@ -10,6 +10,7 @@
 #include <msr.h>
 #include <raw_io.h>
 #include <bitops.h>
+#include <vectors.h>
 
 struct apic_ops {
 	void (*apic_init)(void);
@@ -103,8 +104,14 @@ static int x2apic_send_ipi(uint32_t cpuid, uint32_t vector)
 		return -1;
 	}
 
-	val |= vector | LAPIC_ICR_MODE_FIXED | LAPIC_ICR_DST_MODE_PHYSICAL;
-	val |= rdmsr(MSR_IA32_EXT_XAPICID) << 32;
+	if (vector == NMI_VECTOR)
+		val |= LAPIC_ICR_MODE_NMI | LAPIC_ICR_DST_MODE_PHYSICAL;
+	else
+		val |= vector | LAPIC_ICR_MODE_FIXED | LAPIC_ICR_DST_MODE_PHYSICAL;
+
+	/* send to tearget apic_id */
+	/* TODO: now target to default cpu 0, need to pass target apic id accordingly */
+	/* val |= rdmsr(MSR_IA32_EXT_XAPICID) << 32; */
 
 	wrmsr(MSR_IA32_EXT_APIC_ICR, val);
 

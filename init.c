@@ -38,6 +38,12 @@ static int arch_init(void)
 	return 0;
 }
 
+int __weak timer_demo(void)
+{
+	pr_info("Fake timer demo!\n");
+	return 0;
+}
+
 void c_entry(void)
 {
 	pr_info("c entry !!\n");
@@ -61,13 +67,10 @@ void c_entry(void)
 
 	devcall_init();
 
-	pr_info("will send ipi\n");
-
-	apic_send_ipi(0, 100);
-
 	pr_info("Call apps\n");
 
-	timer_demo();
+	//timer_demo();
+	demo_ipc();
 
 	panic("die loop @ %p \n", c_entry);
 	asm volatile("hlt");

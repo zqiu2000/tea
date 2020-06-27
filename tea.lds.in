@@ -57,6 +57,12 @@ SECTIONS
 	. += MEM_LOG_SIZE;
 	mem_log_end = .;
 
+	. = ALIGN(4);
+	. = SHARE_MEM_ADDR;
+	share_mem = .;
+	. += SHARE_MEM_SIZE;
+	share_mem_end = .;
+
 	/DISCARD/ : {
 		*(.comment)
 		*(.eh_frame*)

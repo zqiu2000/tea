@@ -56,8 +56,10 @@ C_SRC += interrupt/idt.c
 
 C_SRC += driver/uart/uart.c
 C_SRC += driver/time/timer.c
+C_SRC += driver/ipc/ipc.c
 
 C_SRC += apps/demo.c
+C_SRC += apps/demo_ipc.c
 
 C_OBJS = $(patsubst %.c, $(BUILD_HW_DIR)/%.o, $(C_SRC))
 ASM_OBJS = $(patsubst %.S, $(BUILD_HW_DIR)/%.o, $(ASM_SRC))
