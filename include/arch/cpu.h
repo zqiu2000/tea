@@ -167,6 +167,16 @@ static inline void cpuid(uint32_t leaf,
 	asm_cpuid(eax, ebx, ecx, edx);
 }
 
+static inline void x86_enable_caches(void)
+{
+	unsigned long val;
+
+	CPU_CR_READ(cr0, &val);
+	val &= ~(CR0_NW | CR0_CD);
+	CPU_CR_WRITE(cr0, val);
+	/* wb invalid */
+}
+
 #endif /* !ASSEMBLER */
 
 #endif

@@ -26,6 +26,8 @@ static int arch_early_init(void)
 	/* Enable Cache? */
 	/* Enable paging? */
 
+	x86_enable_caches();
+
 	tsc_init();
 
 	early_apic_init();
