@@ -11,37 +11,7 @@
 #include <lapic.h>
 #include <idt.h>
 #include <mod_init.h>
-
-#define MSG_BYTES	(16)
-#define MSG_CNT		(32)
-
-enum {
-	MESG_TYPE_ASYNC = 0,
-	MESG_TYPE_SYNC,
-};
-
-enum {
-	MESG_TEST,
-};
-
-struct mesg_payload {
-	uint32_t mesg_type;
-	union _mesg_data {
-		uint8_t raw_dat[MSG_BYTES];
-		struct dat {
-			uint32_t dat0;
-			uint32_t dat1;
-			uint32_t dat2;
-			uint32_t dat3;
-		} mesg_dat;
-	} mesg_data;
-};
-
-typedef struct _mesg_channel{
-	uint32_t tx_id;
-	uint32_t rx_id;
-	struct mesg_payload mesg[MSG_CNT];
-} mesg_channel;
+#include <ipc/ipc.h>
 
 extern uint8_t share_mem;
 
@@ -96,7 +66,6 @@ int ipc_irq(struct irq_regs *reg, void *data)
 
 	return 0;
 }
-
 
 static int ipc_init(void)
 {

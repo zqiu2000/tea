@@ -28,4 +28,6 @@ int tea_config_init(void);
 #define SHARE_MEM_ADDR			(MEM_LOG_ADDR+MEM_LOG_SIZE)
 #define SHARE_MEM_SIZE			(0x1000)
 
+#define TEA_SIZE				(64*1024) /* 64K */
+
 #endif
