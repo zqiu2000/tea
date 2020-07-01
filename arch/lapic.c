@@ -157,12 +157,24 @@ void early_apic_init(void)
 
 int apic_send_ipi(uint32_t cpuid, uint32_t vector)
 {
-	return lapic_ops.apic_send_ipi(cpuid, vector);
+	int ret;
+	unsigned long flags;
+
+	flags = local_irq_save();
+	ret = lapic_ops.apic_send_ipi(cpuid, vector);
+	local_irq_restore(flags);
+	return ret;
 }
 
 int apic_send_self(uint32_t vector)
 {
-	return lapic_ops.apic_sned_self(vector);
+	int ret;
+	unsigned long flags;
+
+	flags = local_irq_save();
+	ret = lapic_ops.apic_sned_self(vector);
+	local_irq_restore(flags);
+	return ret;
 }
 
 void apic_eoi(void)

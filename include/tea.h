@@ -12,6 +12,7 @@
 #include <log_utils.h>
 #include <memory.h>
 #include <cpu.h>
+#include <idt.h>
 #include <config.h>
 
 #endif
