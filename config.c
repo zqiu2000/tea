@@ -16,5 +16,6 @@ tea_cfg_t tea_cfg = {
 int tea_config_init(void)
 {
 	tea_cfg.log_timestamp = 1;
+	tea_cfg.uart_log = 1;
 	return 0;
 }

@@ -12,6 +12,8 @@
 
 typedef struct _tea_cfg {
 	int log_timestamp;
+	int uart_log;
+	int memlog_dis;
 } tea_cfg_t;
 
 extern tea_cfg_t tea_cfg;

@@ -15,6 +15,9 @@ int uart_tx(unsigned char byte)
 {
 	uint8_t reg;
 
+	if (!tea_cfg.uart_log)
+		return 0;
+
 	do {
 		reg = inb(0x3f8 + UART16550_LSR);
 	} while (!(reg & LSR_THRE) || !(reg & LSR_TEMT));
