@@ -20,6 +20,21 @@ static int load_ucode(void)
 	return 0;
 }
 
+static int dump_crs(void)
+{
+	unsigned long v0, v2, v3,v4;
+
+	CPU_CR_READ(cr0, &v0);
+	CPU_CR_READ(cr2, &v2);
+	CPU_CR_READ(cr3, &v3);
+	CPU_CR_READ(cr4, &v4);
+
+	pr_info("cr0 0x%08x, cr2 0x%08x, cr3 0x%08x, cr4 0x%08x\n",
+		v0, v2, v3, v4);
+
+	return 0;
+}
+
 static int arch_early_init(void)
 {
 	idt_init();
@@ -31,6 +46,8 @@ static int arch_early_init(void)
 	tsc_init();
 
 	early_apic_init();
+
+	dump_crs();
 
 	return 0;
 }
