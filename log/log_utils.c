@@ -18,6 +18,8 @@
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
 #define F_LONG	(1)
 
+static const char *const digit = "0123456789ABCDEF";
+
 struct print_parm {
 	void (*output_char)(char byte, void *data);
 	void *data;
@@ -47,7 +49,6 @@ static void log_distributer(char byte, void *data)
 
 static int parse_number(uint64_t num, int base, int width, struct print_parm *parm)
 {
-	char *digit = "0123456789ABCDEF";
 	char tmp[64];
 	int i = 0, count = 0;
 
@@ -60,6 +61,27 @@ static int parse_number(uint64_t num, int base, int width, struct print_parm *pa
 
 	while (i-- > 0)
 		parm->output_char(tmp[i], parm->data), count++;
+
+	return count;
+}
+
+static int parse_fl(double f, struct print_parm *parm)
+{
+	uint64_t integer;
+	double decimal;
+	int count = 0;
+
+	integer = (uint64_t)f;
+
+	count += parse_number(integer, 10, -1, parm);
+
+	parm->output_char('.', parm->data), count++;
+
+	decimal = f - integer;
+
+	integer = (uint64_t)(decimal * 1000000);
+
+	count += parse_number(integer, 10, -1, parm);
 
 	return count;
 }
@@ -81,6 +103,7 @@ static int parse_print_args(const char *fmt, va_list args, void *data)
 	int64_t va;
 	int width;
 	int flag;
+	double vad;
 
 	for (count = 0; *fmt != '\0'; fmt++) {
 		if (*fmt != '%') {
@@ -165,6 +188,15 @@ static int parse_print_args(const char *fmt, va_list args, void *data)
 			width = 2*sizeof(void *);
 			va = (unsigned long)va_arg(args, void *);
 			count += parse_number(va, 16, width, parm);
+			break;
+		case 'f':
+			vad = va_arg(args, double);
+			if (vad < 0) {
+				vad = -vad;
+				parm->output_char('-', parm->data);
+				count ++;
+			}
+			count += parse_fl(vad, parm);
 			break;
 
 		/* TODO: Add more formats */
