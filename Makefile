@@ -13,6 +13,8 @@ TARGET_KVM = $(BUILD_KVM_DIR)/$(KVM_BIN)
 
 LDS = tea.lds
 
+#EXLIBS = musl-libc
+
 all: $(LDS) $(TARGET).bin $(TARGET_KVM).bin
 
 CC = gcc
@@ -26,6 +28,10 @@ CFLAGS_KVM = $(CFLAGS) -DKVM
 ASFLAGS_KVM = $(ASFLAGS) -DKVM
 
 LD_FLAGS = -nostdlib -T$(LDS)
+
+ifeq ($(EXLIBS), musl-libc)
+LD_FLAGS += -L./musl-libc/ -lc
+endif
 
 INCLUDES = -I./include/ \
 	-I./include/libs/ \
