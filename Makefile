@@ -80,7 +80,7 @@ $(TARGET).bin: $(TARGET).elf
 $(TARGET).elf: $(C_OBJS) $(ASM_OBJS)
 	@ mkdir -p $(dir $@)
 	@echo "Linking : $@"
-	$(Q) $(LD) $(LD_FLAGS) $^ -o $@
+	$(Q) $(LD) $^ $(LD_FLAGS) -o $@
 
 $(BUILD_HW_DIR)/%.o: %.c
 	@ mkdir -p $(dir $@)
@@ -100,7 +100,7 @@ $(TARGET_KVM).bin: $(TARGET_KVM).elf
 $(TARGET_KVM).elf: $(KVM_C_OBJS) $(KVM_ASM_OBJS)
 	@ mkdir -p $(dir $@)
 	@echo "Linking : $@"
-	$(Q) $(LD) $(LD_FLAGS) $^ -o $@
+	$(Q) $(LD) $^ $(LD_FLAGS) -o $@
 
 $(BUILD_KVM_DIR)/%.o: %.c
 	@ mkdir -p $(dir $@)
