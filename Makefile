@@ -30,6 +30,7 @@ ASFLAGS_KVM = $(ASFLAGS) -DKVM
 LD_FLAGS = -nostdlib -T$(LDS)
 
 ifeq ($(EXLIBS), musl-libc)
+CFLAGS += -DCFG_FP_INIT
 LD_FLAGS += -L./musl-libc/ -lc
 endif
 

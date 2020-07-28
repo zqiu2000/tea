@@ -12,6 +12,10 @@
 #include <lapic.h>
 #include <tsc.h>
 
+#ifdef CFG_FP_INIT
+#include <fenv.h>
+#endif
+
 static int load_ucode(void)
 {
 	/* TODO: load the ucode althought BIOS should
@@ -54,6 +58,9 @@ static int arch_early_init(void)
 
 static int arch_init(void)
 {
+#ifdef CFG_FP_INIT
+	fesetenv(FE_DFL_ENV);
+#endif
 	return 0;
 }
 
