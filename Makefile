@@ -22,7 +22,7 @@ LD = ld
 OBJCOPY = objcopy
 NM = nm
 
-CFLAGS = -O2 -nostdlib -fno-builtin -Wall -MMD -m32
+CFLAGS = -O2 -nostdlib -fno-builtin -Wall -MMD -m32 -fno-pie
 ASFLAGS = -nostdlib -Wall -MMD -m32 -DASSEMBLER
 CFLAGS_KVM = $(CFLAGS) -DKVM
 ASFLAGS_KVM = $(ASFLAGS) -DKVM
