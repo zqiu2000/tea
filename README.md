@@ -9,7 +9,7 @@ An IPC driver(based on IPI) cunstructs the communication road between Linux and 
 * No peripheral devices can be accessed by Tea yet. 
 
 ## Environment
-The project has been verified on Ubuntu 18.04, as tea(bare-metal) binary runs on the last core with entry address 0x1000, so kernel must reserved some memory starting from 0x1000, just add "memmap=64k$0x1000" on kernel cmdline, as for Ubuntu, please add "memmap=64k\\\$0x1000" on the "GRUB_CMDLINE_LINUX_DEFAULT" inside file "/etc/defult/grub", then run "sudo update-grub" to take effect.
+The project has been verified on Ubuntu 18.04, as tea(bare-metal) binary runs on the last core with entry address 0x1000, so kernel must reserved some memory starting from 0x1000, just add "memmap=64k$0x1000" on kernel cmdline, as for Ubuntu, please add "memmap=64k\\\\\\$0x1000" on the "GRUB_CMDLINE_LINUX_DEFAULT" inside file "/etc/defult/grub", then run "sudo update-grub" to take effect.
 
 ## Build
 ```bash
