@@ -99,6 +99,7 @@ void c_entry(void)
 	pr_info("Call apps\n");
 
 	//timer_demo();
+	demo_fpu();
 	demo_ipc();
 
 	panic("die loop @ %p \n", c_entry);
