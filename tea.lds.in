@@ -68,3 +68,5 @@ SECTIONS
 		*(.eh_frame*)
 	}
 }
+
+ASSERT((_stack_start < MEM_LOG_ADDR) && (share_mem_end < TEA_SIZE), "Tea memory layout overflow!!!");
