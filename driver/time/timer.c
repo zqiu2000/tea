@@ -82,7 +82,7 @@ static int x2apic_timer_init(void)
 	/* mfence no need in x2apic mode */
 	wrmsr(MSR_IA32_TSC_DEADLINE, 0);
 
-	pr_info("TSC DEADLINE 0x%016lx\n, lvttimer 0x%016lx",
+	pr_info("TSC DEADLINE 0x%016lx, lvttimer 0x%016lx\n",
 		rdmsr(MSR_IA32_TSC_DEADLINE),
 		rdmsr(MSR_IA32_EXT_APIC_LVT_TIMER));
 
