@@ -177,6 +177,20 @@ static inline void x86_enable_caches(void)
 	/* wb invalid */
 }
 
+static inline void sse_enable(void)
+{
+	unsigned long v0, v4;
+
+	CPU_CR_READ(cr0, &v0);
+	v0 &= ~CR0_EM;
+	v0 |= CR0_MP;
+	CPU_CR_WRITE(cr0, v0);
+
+	CPU_CR_READ(cr4, &v4);
+	v4 |= CR4_OSFXSR | CR4_OSXMMEXCPT;
+	CPU_CR_WRITE(cr4, v4);
+}
+
 #endif /* !ASSEMBLER */
 
 #endif

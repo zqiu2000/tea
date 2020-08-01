@@ -72,6 +72,9 @@ int __weak timer_demo(void)
 
 void c_entry(void)
 {
+	/* Enable SSE */
+	sse_enable();
+
 	pr_info("c entry !!\n");
 	/* Init BSS? */
 
