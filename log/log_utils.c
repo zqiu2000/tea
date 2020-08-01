@@ -19,6 +19,27 @@
 #define F_LONG	(1)
 
 static const char *const digit = "0123456789ABCDEF";
+static const double pow10[] = {
+	1,
+	1e1,
+	1e2,
+	1e3,
+	1e4,
+	1e5,
+	1e6,
+	1e7,
+	1e8,
+	1e9,
+	1e10,
+	1e11,
+	1e12,
+	1e13,
+	1e14,
+	1e15,
+	1e16,
+	1e17,
+	1e18
+};
 
 struct print_parm {
 	void (*output_char)(char byte, void *data);
@@ -65,11 +86,17 @@ static int parse_number(uint64_t num, int base, int width, struct print_parm *pa
 	return count;
 }
 
-static int parse_fl(double f, struct print_parm *parm)
+static int parse_fl(double f, int precision, struct print_parm *parm)
 {
 	uint64_t integer;
 	double decimal;
 	int count = 0;
+
+	/* Max precision is 18 */
+	if (precision == -1)
+		precision = 6;
+	else if (precision > 18)
+		precision = 18;
 
 	integer = (uint64_t)f;
 
@@ -79,7 +106,7 @@ static int parse_fl(double f, struct print_parm *parm)
 
 	decimal = f - integer;
 
-	integer = (uint64_t)(decimal * 1000000);
+	integer = (uint64_t)(decimal * pow10[precision]);
 
 	count += parse_number(integer, 10, -1, parm);
 
@@ -116,6 +143,10 @@ static int parse_print_args(const char *fmt, va_list args, void *data)
 
 		width = -1;
 		if (is_digit(*fmt)) {
+			width = skip_atoi(&fmt);
+		} else if (*fmt == '.') {
+			/* Float point precision for decimal part, eg. "%.18f" */
+			fmt++;
 			width = skip_atoi(&fmt);
 		}
 
@@ -196,7 +227,7 @@ static int parse_print_args(const char *fmt, va_list args, void *data)
 				parm->output_char('-', parm->data);
 				count ++;
 			}
-			count += parse_fl(vad, parm);
+			count += parse_fl(vad, width, parm);
 			break;
 
 		/* TODO: Add more formats */
