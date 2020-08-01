@@ -13,6 +13,7 @@ TARGET_KVM = $(BUILD_KVM_DIR)/$(KVM_BIN)
 
 LDS = tea.lds
 
+ENA_SSE = true
 #EXLIBS = musl-libc
 
 all: $(LDS) $(TARGET).bin $(TARGET_KVM).bin
@@ -32,6 +33,10 @@ LD_FLAGS = -nostdlib -T$(LDS)
 ifeq ($(EXLIBS), musl-libc)
 CFLAGS += -DCFG_FP_INIT
 LD_FLAGS += -L./musl-libc/ -lc
+endif
+
+ifeq ($(ENA_SSE), true)
+CFLAGS += -mfpmath=sse -msse2
 endif
 
 INCLUDES = -I./include/ \
